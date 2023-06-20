@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.MicrofinanceCompanyComplianceMapper">
+
+    <resultMap type="MicrofinanceCompanyCompliance" id="MicrofinanceCompanyComplianceResult">
+        <result property="id"    column="id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="fundFlows"    column="fund_flows"    />
+        <result property="operatingArea"    column="operating_area"    />
+        <result property="loanInterestRate"    column="loan_interest_rate"    />
+        <result property="loanTarget"    column="loan_target"    />
+        <result property="loanRatio"    column="loan_ratio"    />
+        <result property="infoDate"    column="info_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMicrofinanceCompanyComplianceVo">
+        select c.id, c.dept_id, d.dept_name, c.fund_flows, c.operating_area, c.loan_interest_rate, c.loan_target, c.loan_ratio, c.info_date, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from microfinance_company_compliance c LEFT JOIN sys_dept d on c.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectMicrofinanceCompanyComplianceList" parameterType="MicrofinanceCompanyCompliance" resultMap="MicrofinanceCompanyComplianceResult">
+        <include refid="selectMicrofinanceCompanyComplianceVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="fundFlows != null  and fundFlows != ''"> and c.fund_flows = #{fundFlows}</if>
+            <if test="operatingArea != null  and operatingArea != ''"> and c.operating_area = #{operatingArea}</if>
+            <if test="loanInterestRate != null "> and c.loan_interest_rate = #{loanInterestRate}</if>
+            <if test="loanTarget != null  and loanTarget != ''"> and c.loan_target = #{loanTarget}</if>
+            <if test="loanRatio != null "> and c.loan_ratio = #{loanRatio}</if>
+            <if test="infoDate != null "> and c.info_date = #{infoDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectMicrofinanceCompanyComplianceById" parameterType="Long" resultMap="MicrofinanceCompanyComplianceResult">
+        <include refid="selectMicrofinanceCompanyComplianceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMicrofinanceCompanyCompliance" parameterType="MicrofinanceCompanyCompliance" useGeneratedKeys="true" keyProperty="id">
+        insert into microfinance_company_compliance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="fundFlows != null">fund_flows,</if>
+            <if test="operatingArea != null">operating_area,</if>
+            <if test="loanInterestRate != null">loan_interest_rate,</if>
+            <if test="loanTarget != null">loan_target,</if>
+            <if test="loanRatio != null">loan_ratio,</if>
+            <if test="infoDate != null">info_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="fundFlows != null">#{fundFlows},</if>
+            <if test="operatingArea != null">#{operatingArea},</if>
+            <if test="loanInterestRate != null">#{loanInterestRate},</if>
+            <if test="loanTarget != null">#{loanTarget},</if>
+            <if test="loanRatio != null">#{loanRatio},</if>
+            <if test="infoDate != null">#{infoDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMicrofinanceCompanyCompliance" parameterType="MicrofinanceCompanyCompliance">
+        update microfinance_company_compliance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="fundFlows != null">fund_flows = #{fundFlows},</if>
+            <if test="operatingArea != null">operating_area = #{operatingArea},</if>
+            <if test="loanInterestRate != null">loan_interest_rate = #{loanInterestRate},</if>
+            <if test="loanTarget != null">loan_target = #{loanTarget},</if>
+            <if test="loanRatio != null">loan_ratio = #{loanRatio},</if>
+            <if test="infoDate != null">info_date = #{infoDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMicrofinanceCompanyComplianceById" parameterType="Long">
+        delete from microfinance_company_compliance where id = #{id}
+    </delete>
+
+    <delete id="deleteMicrofinanceCompanyComplianceByIds" parameterType="String">
+        update microfinance_company_compliance set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

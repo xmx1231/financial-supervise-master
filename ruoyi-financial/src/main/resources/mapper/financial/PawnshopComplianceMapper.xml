@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.PawnshopComplianceMapper">
+
+    <resultMap type="PawnshopCompliance" id="PawnshopComplianceResult">
+        <result property="id"    column="id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="pawnTicketUsage"    column="pawn_ticket_usage"    />
+        <result property="interestFeeCollection"    column="interest_fee_collection"    />
+        <result property="forfeitedAssetDisposal"    column="forfeited_asset_disposal"    />
+        <result property="shareholderFundTransaction"    column="shareholder_fund_transaction"    />
+        <result property="capitalContribution"    column="capital_contribution"    />
+        <result property="infoDate"    column="info_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPawnshopComplianceVo">
+        select c.id, c.dept_id, d.dept_name, c.pawn_ticket_usage, c.interest_fee_collection, c.forfeited_asset_disposal, c.shareholder_fund_transaction, c.capital_contribution, c.info_date, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from pawnshop_compliance c LEFT JOIN sys_dept d on c.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectPawnshopComplianceList" parameterType="PawnshopCompliance" resultMap="PawnshopComplianceResult">
+        <include refid="selectPawnshopComplianceVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="pawnTicketUsage != null  and pawnTicketUsage != ''"> and c.pawn_ticket_usage = #{pawnTicketUsage}</if>
+            <if test="interestFeeCollection != null  and interestFeeCollection != ''"> and c.interest_fee_collection = #{interestFeeCollection}</if>
+            <if test="forfeitedAssetDisposal != null  and forfeitedAssetDisposal != ''"> and c.forfeited_asset_disposal = #{forfeitedAssetDisposal}</if>
+            <if test="shareholderFundTransaction != null  and shareholderFundTransaction != ''"> and c.shareholder_fund_transaction = #{shareholderFundTransaction}</if>
+            <if test="capitalContribution != null  and capitalContribution != ''"> and c.capital_contribution = #{capitalContribution}</if>
+            <if test="infoDate != null "> and c.info_date = #{infoDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectPawnshopComplianceById" parameterType="Long" resultMap="PawnshopComplianceResult">
+        <include refid="selectPawnshopComplianceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPawnshopCompliance" parameterType="PawnshopCompliance" useGeneratedKeys="true" keyProperty="id">
+        insert into pawnshop_compliance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="pawnTicketUsage != null">pawn_ticket_usage,</if>
+            <if test="interestFeeCollection != null">interest_fee_collection,</if>
+            <if test="forfeitedAssetDisposal != null">forfeited_asset_disposal,</if>
+            <if test="shareholderFundTransaction != null">shareholder_fund_transaction,</if>
+            <if test="capitalContribution != null">capital_contribution,</if>
+            <if test="infoDate != null">info_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="pawnTicketUsage != null">#{pawnTicketUsage},</if>
+            <if test="interestFeeCollection != null">#{interestFeeCollection},</if>
+            <if test="forfeitedAssetDisposal != null">#{forfeitedAssetDisposal},</if>
+            <if test="shareholderFundTransaction != null">#{shareholderFundTransaction},</if>
+            <if test="capitalContribution != null">#{capitalContribution},</if>
+            <if test="infoDate != null">#{infoDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePawnshopCompliance" parameterType="PawnshopCompliance">
+        update pawnshop_compliance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="pawnTicketUsage != null">pawn_ticket_usage = #{pawnTicketUsage},</if>
+            <if test="interestFeeCollection != null">interest_fee_collection = #{interestFeeCollection},</if>
+            <if test="forfeitedAssetDisposal != null">forfeited_asset_disposal = #{forfeitedAssetDisposal},</if>
+            <if test="shareholderFundTransaction != null">shareholder_fund_transaction = #{shareholderFundTransaction},</if>
+            <if test="capitalContribution != null">capital_contribution = #{capitalContribution},</if>
+            <if test="infoDate != null">info_date = #{infoDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePawnshopComplianceById" parameterType="Long">
+        delete from pawnshop_compliance where id = #{id}
+    </delete>
+
+    <delete id="deletePawnshopComplianceByIds" parameterType="String">
+        update pawnshop_compliance set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

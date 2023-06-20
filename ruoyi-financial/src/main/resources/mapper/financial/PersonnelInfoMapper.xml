@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.PersonnelInfoMapper">
+
+    <resultMap type="PersonnelInfo" id="PersonnelInfoResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="education"    column="education"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="department"    column="department"    />
+        <result property="position"    column="position"    />
+        <result property="phone"    column="phone"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPersonnelInfoVo">
+        select id, name, education, company_id, department, position, phone, del_flag, create_by, create_time, update_by, update_time from personnel_info
+    </sql>
+
+    <select id="selectPersonnelInfoList" parameterType="PersonnelInfo" resultMap="PersonnelInfoResult">
+        <include refid="selectPersonnelInfoVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="education != null  and education != ''"> and education = #{education}</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+            <if test="department != null  and department != ''"> and department = #{department}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+        </where>
+    </select>
+
+    <select id="selectPersonnelInfoById" parameterType="Long" resultMap="PersonnelInfoResult">
+        <include refid="selectPersonnelInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPersonnelInfo" parameterType="PersonnelInfo">
+        insert into personnel_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="education != null">education,</if>
+            <if test="companyId != null">company_id,</if>
+            <if test="department != null">department,</if>
+            <if test="position != null">position,</if>
+            <if test="phone != null">phone,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="education != null">#{education},</if>
+            <if test="companyId != null">#{companyId},</if>
+            <if test="department != null">#{department},</if>
+            <if test="position != null">#{position},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonnelInfo" parameterType="PersonnelInfo">
+        update personnel_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="companyId != null">company_id = #{companyId},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonnelInfoById" parameterType="Long">
+        delete from personnel_info where id = #{id}
+    </delete>
+
+    <delete id="deletePersonnelInfoByIds" parameterType="String">
+        update personnel_info set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

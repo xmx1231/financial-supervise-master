@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.FactoringCompanyMapper">
+
+    <resultMap type="FactoringCompany" id="FactoringCompanyResult">
+        <result property="id"    column="id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="newLoanAmount"    column="new_loan_amount"    />
+        <result property="interestRate"    column="interest_rate"    />
+        <result property="yearEndDisbursementBalance"    column="year_end_disbursement_balance"    />
+        <result property="infoDate"    column="info_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFactoringCompanyVo">
+        select c.id, c.dept_id, d.dept_name, c.new_loan_amount, c.interest_rate, c.year_end_disbursement_balance, c.info_date, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from factoring_company c LEFT JOIN sys_dept d on c.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectFactoringCompanyList" parameterType="FactoringCompany" resultMap="FactoringCompanyResult">
+        <include refid="selectFactoringCompanyVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="newLoanAmount != null "> and new_loan_amount = #{newLoanAmount}</if>
+            <if test="interestRate != null "> and interest_rate = #{interestRate}</if>
+            <if test="yearEndDisbursementBalance != null "> and year_end_disbursement_balance = #{yearEndDisbursementBalance}</if>
+            <if test="infoDate != null "> and info_date = #{infoDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectFactoringCompanyById" parameterType="Long" resultMap="FactoringCompanyResult">
+        <include refid="selectFactoringCompanyVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFactoringCompany" parameterType="FactoringCompany" useGeneratedKeys="true" keyProperty="id">
+        insert into factoring_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="newLoanAmount != null">new_loan_amount,</if>
+            <if test="interestRate != null">interest_rate,</if>
+            <if test="yearEndDisbursementBalance != null">year_end_disbursement_balance,</if>
+            <if test="infoDate != null">info_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="newLoanAmount != null">#{newLoanAmount},</if>
+            <if test="interestRate != null">#{interestRate},</if>
+            <if test="yearEndDisbursementBalance != null">#{yearEndDisbursementBalance},</if>
+            <if test="infoDate != null">#{infoDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFactoringCompany" parameterType="FactoringCompany">
+        update factoring_company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="newLoanAmount != null">new_loan_amount = #{newLoanAmount},</if>
+            <if test="interestRate != null">interest_rate = #{interestRate},</if>
+            <if test="yearEndDisbursementBalance != null">year_end_disbursement_balance = #{yearEndDisbursementBalance},</if>
+            <if test="infoDate != null">info_date = #{infoDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFactoringCompanyById" parameterType="Long">
+        delete from factoring_company where id = #{id}
+    </delete>
+
+    <delete id="deleteFactoringCompanyByIds" parameterType="String">
+        update factoring_company set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

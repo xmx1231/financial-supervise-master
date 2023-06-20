@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.MicrofinanceCompanyRiskMapper">
+
+    <resultMap type="MicrofinanceCompanyRisk" id="MicrofinanceCompanyRiskResult">
+        <result property="id"    column="id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="internalControls"    column="internal_controls"    />
+        <result property="financialManagement"    column="financial_management"    />
+        <result property="riskManagement"    column="risk_management"    />
+        <result property="infoDate"    column="info_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectMicrofinanceCompanyRiskVo">
+        select c.id, c.dept_id, d.dept_name, c.internal_controls, c.financial_management, c.risk_management, c.info_date, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from microfinance_company_risk c LEFT JOIN sys_dept d on c.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectMicrofinanceCompanyRiskList" parameterType="MicrofinanceCompanyRisk" resultMap="MicrofinanceCompanyRiskResult">
+        <include refid="selectMicrofinanceCompanyRiskVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="internalControls != null  and internalControls != ''"> and c.internal_controls = #{internalControls}</if>
+            <if test="financialManagement != null  and financialManagement != ''"> and c.financial_management = #{financialManagement}</if>
+            <if test="riskManagement != null  and riskManagement != ''"> and c.risk_management = #{riskManagement}</if>
+            <if test="infoDate != null "> and c.info_date = #{infoDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectMicrofinanceCompanyRiskById" parameterType="Long" resultMap="MicrofinanceCompanyRiskResult">
+        <include refid="selectMicrofinanceCompanyRiskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMicrofinanceCompanyRisk" parameterType="MicrofinanceCompanyRisk" useGeneratedKeys="true" keyProperty="id">
+        insert into microfinance_company_risk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="internalControls != null">internal_controls,</if>
+            <if test="financialManagement != null">financial_management,</if>
+            <if test="riskManagement != null">risk_management,</if>
+            <if test="infoDate != null">info_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="internalControls != null">#{internalControls},</if>
+            <if test="financialManagement != null">#{financialManagement},</if>
+            <if test="riskManagement != null">#{riskManagement},</if>
+            <if test="infoDate != null">#{infoDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMicrofinanceCompanyRisk" parameterType="MicrofinanceCompanyRisk">
+        update microfinance_company_risk
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="internalControls != null">internal_controls = #{internalControls},</if>
+            <if test="financialManagement != null">financial_management = #{financialManagement},</if>
+            <if test="riskManagement != null">risk_management = #{riskManagement},</if>
+            <if test="infoDate != null">info_date = #{infoDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMicrofinanceCompanyRiskById" parameterType="Long">
+        delete from microfinance_company_risk where id = #{id}
+    </delete>
+
+    <delete id="deleteMicrofinanceCompanyRiskByIds" parameterType="String">
+        update microfinance_company_risk set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

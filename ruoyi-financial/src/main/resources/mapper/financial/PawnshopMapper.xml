@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.PawnshopMapper">
+
+    <resultMap type="Pawnshop" id="PawnshopResult">
+        <result property="id"    column="id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="newLoanAmount"    column="new_loan_amount"    />
+        <result property="interest"    column="interest"    />
+        <result property="comprehensiveFeeRate"    column="comprehensive_fee_rate"    />
+        <result property="yearEndOutstandingBalance"    column="year_end_outstanding_balance"    />
+        <result property="infoDate"    column="info_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPawnshopVo">
+        select c.id, c.dept_id, d.dept_name, c.new_loan_amount, c.interest, c.comprehensive_fee_rate, c.year_end_outstanding_balance, c.info_date, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from pawnshop c LEFT JOIN sys_dept d on c.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectPawnshopList" parameterType="Pawnshop" resultMap="PawnshopResult">
+        <include refid="selectPawnshopVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="newLoanAmount != null "> and c.new_loan_amount = #{newLoanAmount}</if>
+            <if test="interest != null "> and c.interest = #{interest}</if>
+            <if test="comprehensiveFeeRate != null "> and c.comprehensive_fee_rate = #{comprehensiveFeeRate}</if>
+            <if test="yearEndOutstandingBalance != null "> and c.year_end_outstanding_balance = #{yearEndOutstandingBalance}</if>
+            <if test="infoDate != null "> and c.info_date = #{infoDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectPawnshopById" parameterType="Long" resultMap="PawnshopResult">
+        <include refid="selectPawnshopVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPawnshop" parameterType="Pawnshop" useGeneratedKeys="true" keyProperty="id">
+        insert into pawnshop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="newLoanAmount != null">new_loan_amount,</if>
+            <if test="interest != null">interest,</if>
+            <if test="comprehensiveFeeRate != null">comprehensive_fee_rate,</if>
+            <if test="yearEndOutstandingBalance != null">year_end_outstanding_balance,</if>
+            <if test="infoDate != null">info_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="newLoanAmount != null">#{newLoanAmount},</if>
+            <if test="interest != null">#{interest},</if>
+            <if test="comprehensiveFeeRate != null">#{comprehensiveFeeRate},</if>
+            <if test="yearEndOutstandingBalance != null">#{yearEndOutstandingBalance},</if>
+            <if test="infoDate != null">#{infoDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePawnshop" parameterType="Pawnshop">
+        update pawnshop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="newLoanAmount != null">new_loan_amount = #{newLoanAmount},</if>
+            <if test="interest != null">interest = #{interest},</if>
+            <if test="comprehensiveFeeRate != null">comprehensive_fee_rate = #{comprehensiveFeeRate},</if>
+            <if test="yearEndOutstandingBalance != null">year_end_outstanding_balance = #{yearEndOutstandingBalance},</if>
+            <if test="infoDate != null">info_date = #{infoDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePawnshopById" parameterType="Long">
+        delete from pawnshop where id = #{id}
+    </delete>
+
+    <delete id="deletePawnshopByIds" parameterType="String">
+        update pawnshop set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

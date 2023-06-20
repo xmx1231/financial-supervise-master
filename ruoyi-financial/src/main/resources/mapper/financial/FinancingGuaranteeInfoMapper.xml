@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.financial.mapper.FinancingGuaranteeInfoMapper">
+
+    <resultMap type="FinancingGuaranteeInfo" id="FinancingGuaranteeInfoResult">
+        <result property="id"    column="id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="companyAddress"    column="company_address"    />
+        <result property="businessLicense"    column="business_license"    />
+        <result property="existenceStatus"    column="existence_status"    />
+        <result property="personnelQualification"    column="personnel_qualification"    />
+        <result property="mainBusiness"    column="main_business"    />
+        <result property="outstandingBalance"    column="outstanding_balance"    />
+        <result property="infoDate"    column="info_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFinancingGuaranteeInfoVo">
+        select c.id, c.dept_id, d.dept_name, c.company_address, c.business_license, c.existence_status, c.personnel_qualification, c.main_business, c.outstanding_balance, c.info_date, c.del_flag, c.create_by, c.create_time, c.update_by, c.update_time from financing_guarantee_info c LEFT JOIN sys_dept d on c.dept_id = d.dept_id
+    </sql>
+
+    <select id="selectFinancingGuaranteeInfoList" parameterType="FinancingGuaranteeInfo" resultMap="FinancingGuaranteeInfoResult">
+        <include refid="selectFinancingGuaranteeInfoVo"/>
+        <where>
+            c.del_flag = '0'
+            <if test="companyAddress != null  and companyAddress != ''"> and c.company_address = #{companyAddress}</if>
+            <if test="businessLicense != null  and businessLicense != ''"> and c.business_license = #{businessLicense}</if>
+            <if test="existenceStatus != null  and existenceStatus != ''"> and c.existence_status = #{existenceStatus}</if>
+            <if test="personnelQualification != null  and personnelQualification != ''"> and c.personnel_qualification = #{personnelQualification}</if>
+            <if test="mainBusiness != null  and mainBusiness != ''"> and c.main_business = #{mainBusiness}</if>
+            <if test="outstandingBalance != null "> and c.outstanding_balance = #{outstandingBalance}</if>
+            <if test="infoDate != null "> and c.info_date = #{infoDate}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectFinancingGuaranteeInfoById" parameterType="Long" resultMap="FinancingGuaranteeInfoResult">
+        <include refid="selectFinancingGuaranteeInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertFinancingGuaranteeInfo" parameterType="FinancingGuaranteeInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into financing_guarantee_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="companyAddress != null">company_address,</if>
+            <if test="businessLicense != null">business_license,</if>
+            <if test="existenceStatus != null">existence_status,</if>
+            <if test="personnelQualification != null">personnel_qualification,</if>
+            <if test="mainBusiness != null">main_business,</if>
+            <if test="outstandingBalance != null">outstanding_balance,</if>
+            <if test="infoDate != null">info_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="companyAddress != null">#{companyAddress},</if>
+            <if test="businessLicense != null">#{businessLicense},</if>
+            <if test="existenceStatus != null">#{existenceStatus},</if>
+            <if test="personnelQualification != null">#{personnelQualification},</if>
+            <if test="mainBusiness != null">#{mainBusiness},</if>
+            <if test="outstandingBalance != null">#{outstandingBalance},</if>
+            <if test="infoDate != null">#{infoDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFinancingGuaranteeInfo" parameterType="FinancingGuaranteeInfo">
+        update financing_guarantee_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="companyAddress != null">company_address = #{companyAddress},</if>
+            <if test="businessLicense != null">business_license = #{businessLicense},</if>
+            <if test="existenceStatus != null">existence_status = #{existenceStatus},</if>
+            <if test="personnelQualification != null">personnel_qualification = #{personnelQualification},</if>
+            <if test="mainBusiness != null">main_business = #{mainBusiness},</if>
+            <if test="outstandingBalance != null">outstanding_balance = #{outstandingBalance},</if>
+            <if test="infoDate != null">info_date = #{infoDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFinancingGuaranteeInfoById" parameterType="Long">
+        delete from financing_guarantee_info where id = #{id}
+    </delete>
+
+    <delete id="deleteFinancingGuaranteeInfoByIds" parameterType="String">
+        update financing_guarantee_info set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
